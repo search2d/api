@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Search2d Tests">
+            <directory suffix="Test.php">./test</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="API_DATABASE_DSN" value=""/>
+        <env name="API_LOGGER_NAME" value=""/>
+        <env name="API_LOGGER_PATH" value=""/>
+        <env name="API_LOGGER_LEVEL" value=""/>
+        <env name="API_SEARCH_S3_REGION" value=""/>
+        <env name="API_SEARCH_S3_INDEXED_IMAGE_BUCKET" value=""/>
+        <env name="API_SEARCH_S3_INDEXED_IMAGE_BASE_URL" value=""/>
+        <env name="API_SEARCH_S3_QUERIED_IMAGE_BUCKET" value=""/>
+        <env name="API_SEARCH_S3_QUERIED_IMAGE_BASE_URL" value=""/>
+        <env name="API_SEARCH_NNS_BASE_URI" value=""/>
+        <env name="API_PIXIV_API_USERNAME" value=""/>
+        <env name="API_PIXIV_API_PASSWORD" value=""/>
+        <env name="API_PIXIV_API_CLIENT_ID" value=""/>
+        <env name="API_PIXIV_API_CLIENT_SECRET" value=""/>
+        <env name="API_PIXIV_SQS_REGION" value=""/>
+        <env name="API_PIXIV_SQS_REQUEST_ILLUST_URL" value=""/>
+        <env name="API_PIXIV_SQS_REQUEST_RANKING_URL" value=""/>
+        <env name="AWS_ACCESS_KEY_ID" value=""/>
+        <env name="AWS_SECRET_ACCESS_KEY" value=""/>
+    </php>
+</phpunit>

@@ -1,0 +1,78 @@
+<?php
+declare(strict_types=1);
+
+namespace Search2d\Presentation\Api\Action\Api;
+
+use Aura\Filter\FilterFactory;
+use League\Tactician\CommandBus;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Search2d\Domain\Search\Sha1;
+use Search2d\Domain\Search\Sha1ValidationException;
+use Search2d\Presentation\Api\Helper;
+use Search2d\Usecase\Search\SearchCommand;
+
+class SearchAction
+{
+    const SEARCH_RADIUS = 5;
+    const SEARCH_COUNT = 10;
+
+    /** @var \League\Tactician\CommandBus */
+    private $commandBus;
+
+    /** @var \Search2d\Presentation\Api\Helper */
+    private $helper;
+
+    /**
+     * @param \League\Tactician\CommandBus $commandBus
+     * @param \Search2d\Presentation\Api\Helper $helper
+     */
+    public function __construct(CommandBus $commandBus, Helper $helper)
+    {
+        $this->commandBus = $commandBus;
+        $this->helper = $helper;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param array $args
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $filter = (new FilterFactory())->newSubjectFilter();
+        $filter->validate('sha1')->is('regex', '/^[a-zA-Z0-9]{40}$/');
+
+        if (!$filter->apply($args)) {
+            return $this->helper->responseFailure($response, 403, $filter->getFailures()->getMessagesAsString());
+        }
+
+        try {
+            $sha1 = new Sha1($args['sha1']);
+        } catch (Sha1ValidationException $e) {
+            return $this->helper->responseFailure($response, 403, $e->getMessage());
+        }
+
+        /** @var \Search2d\Domain\Search\ResultCollection $results */
+        $results = $this->commandBus->handle(new SearchCommand($sha1, self::SEARCH_RADIUS, self::SEARCH_COUNT));
+
+        $data = [];
+
+        /** @var \Search2d\Domain\Search\Result $result */
+        foreach ($results as $result) {
+            $data[] = [
+                'distance' => $result->getDistance(),
+                'work_url' => $result->getIndexedImage()->getDetail()->getWorkUrl(),
+                'work_title' => $result->getIndexedImage()->getDetail()->getWorkTitle(),
+                'work_caption' => $result->getIndexedImage()->getDetail()->getWorkCaption(),
+                'work_created' => $result->getIndexedImage()->getDetail()->getWorkCreated(),
+                'author_url' => $result->getIndexedImage()->getDetail()->getAuthorUrl(),
+                'author_name' => $result->getIndexedImage()->getDetail()->getAuthorName(),
+                'author_biog' => $result->getIndexedImage()->getDetail()->getAuthorBiog(),
+            ];
+        }
+
+        return $this->helper->responseSuccess($response, 200, $data);
+    }
+}
