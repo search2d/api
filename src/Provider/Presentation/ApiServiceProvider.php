@@ -10,7 +10,7 @@ use Pimple\ServiceProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Search2d\Infrastructure\Presentation\Api\ActionMiddleware;
-use Search2d\Infrastructure\Presentation\Api\CorsMiddleware;
+use Search2d\Infrastructure\Presentation\Api\OptionsResponderMiddleware;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
 use Search2d\Infrastructure\Presentation\Api\RouterMiddleware;
 use Search2d\Presentation\Api\Action\Api\QueryImgAction;
@@ -40,14 +40,14 @@ class ApiServiceProvider implements ServiceProviderInterface
     {
         $container[Frontend::class] = function (Container $container) {
             return new Frontend([
-                $container[CorsMiddleware::class],
+                $container[OptionsResponderMiddleware::class],
                 $container[RouterMiddleware::class],
                 $container[ActionMiddleware::class],
             ]);
         };
 
-        $container[CorsMiddleware::class] = function (Container $container) {
-            return new CorsMiddleware();
+        $container[OptionsResponderMiddleware::class] = function (Container $container) {
+            return new OptionsResponderMiddleware();
         };
 
         $container[RouterMiddleware::class] = function (Container $container) {
