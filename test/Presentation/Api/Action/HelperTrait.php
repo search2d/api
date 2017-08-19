@@ -17,7 +17,7 @@ trait HelperTrait
 
         $data = json_decode($response->getBody()->getContents());
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException(json_last_error_msg(), json_last_error());
+            $this->fail(json_last_error_msg());
         }
 
         return $data;
