@@ -1,7 +1,9 @@
 {
   "require": {
     "php": "^7.1",
-    "slim/slim": "^3.8",
+    "pimple/pimple": "^3.2",
+    "nikic/fast-route": "^1.2",
+    "zendframework/zend-diactoros": "^1.4",
     "zendframework/zend-config": "^3.1",
     "doctrine/dbal": "^2.6",
     "doctrine/migrations": "^1.5",

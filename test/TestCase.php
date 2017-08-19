@@ -9,14 +9,12 @@ use Faker\Factory;
 use Faker\Generator;
 use Psr\Http\Message\ResponseInterface;
 use Search2d\Container;
-use Slim\App;
-use Slim\Http\Headers;
-use Slim\Http\Request;
-use Slim\Http\Uri;
+use Search2d\Infrastructure\Presentation\Api\Frontend;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use function GuzzleHttp\Psr7\stream_for;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequest;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -96,21 +94,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function call(string $method, string $uri): ResponseInterface
     {
-        $this->container['request'] = function () use ($method, $uri) {
-            return new Request(
-                $method,
-                Uri::createFromString($uri),
-                new Headers(),
-                [],
-                [],
-                stream_for(''),
-                []
-            );
-        };
+        $request = new ServerRequest([], [], $uri, $method);
+        $response = new Response();
 
-        /** @var \Slim\App $app */
-        $app = $this->container[App::class];
-
-        return $app->run(true);
+        /** @var \Search2d\Infrastructure\Presentation\Api\Frontend $frontend */
+        $frontend = $this->container[Frontend::class];
+        return $frontend->handle($request, $response);
     }
 }

@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Search2d;
 
-use Slim\Container as SlimContainer;
+use Pimple\Container as BaseContainer;
 use Zend\Config\Config;
 
-class Container extends SlimContainer
+class Container extends BaseContainer
 {
     /** @var array */
     private $providers = [

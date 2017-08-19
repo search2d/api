@@ -10,6 +10,10 @@ return [
         'path' => env_str('API_LOGGER_PATH'),
         'level' => env_str('API_LOGGER_LEVEL'),
     ],
+    'router' => [
+        'cache_file' => env_str('API_ROUTER_CACHE_FILE', ''),
+        'cache_disabled' => env_bool('API_ROUTER_CACHE_DISABLED', true),
+    ],
     'search' => [
         's3' => [
             'region' => env_str('API_SEARCH_S3_REGION'),

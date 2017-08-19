@@ -3,17 +3,21 @@ declare(strict_types=1);
 
 namespace Search2d\Provider\Presentation;
 
+use FastRoute\RouteCollector;
 use League\Tactician\CommandBus;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
+use Search2d\Infrastructure\Presentation\Api\ActionMiddleware;
+use Search2d\Infrastructure\Presentation\Api\CorsMiddleware;
+use Search2d\Infrastructure\Presentation\Api\Frontend;
+use Search2d\Infrastructure\Presentation\Api\RouterMiddleware;
 use Search2d\Presentation\Api\Action\Api\QueryImgAction;
 use Search2d\Presentation\Api\Action\Api\QueryUrlAction;
 use Search2d\Presentation\Api\Action\Api\SearchAction;
 use Search2d\Presentation\Api\Helper;
-use Slim\App;
+use function FastRoute\cachedDispatcher;
 
 class ApiServiceProvider implements ServiceProviderInterface
 {
@@ -23,9 +27,57 @@ class ApiServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container): void
     {
+        $this->registerFrontend($container);
         $this->registerActions($container);
         $this->registerHelper($container);
-        $this->registerSlim($container);
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     * @return void
+     */
+    private function registerFrontend(Container $container): void
+    {
+        $container[Frontend::class] = function (Container $container) {
+            return new Frontend([
+                $container[CorsMiddleware::class],
+                $container[RouterMiddleware::class],
+                $container[ActionMiddleware::class],
+            ]);
+        };
+
+        $container[CorsMiddleware::class] = function (Container $container) {
+            return new CorsMiddleware();
+        };
+
+        $container[RouterMiddleware::class] = function (Container $container) {
+            $router = $container['config']->router;
+            $dispatcher = cachedDispatcher(function (RouteCollector $r) {
+                $this->routeDefinition($r);
+            }, [
+                'cacheFile' => $router->cache_file,
+                'cacheDisabled' => $router->cache_disabled,
+            ]);
+            return new RouterMiddleware($dispatcher);
+        };
+
+        $container[ActionMiddleware::class] = function (Container $container) {
+            return new ActionMiddleware(
+                function (string $name) use ($container): callable {
+                    return $container[$name];
+                },
+                function (ServerRequestInterface $request, ResponseInterface $response) use ($container): ResponseInterface {
+                    /** @var \Search2d\Presentation\Api\Helper $helper */
+                    $helper = $container[Helper::class];
+                    return $helper->responseFailure($response, 404, 'Not Found');
+                },
+                function (ServerRequestInterface $request, ResponseInterface $response) use ($container): ResponseInterface {
+                    /** @var \Search2d\Presentation\Api\Helper $helper */
+                    $helper = $container[Helper::class];
+                    return $helper->responseFailure($response, 405, 'Method Not Allowed');
+                }
+            );
+        };
     }
 
     /**
@@ -59,61 +111,13 @@ class ApiServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * @param \Pimple\Container $container
+     * @param \FastRoute\RouteCollector $r
      * @return void
      */
-    private function registerSlim(Container $container): void
+    private function routeDefinition(RouteCollector $r): void
     {
-        $container['errorHandler'] = function (Container $container) {
-            return function (ServerRequestInterface $request, ResponseInterface $response, \Exception $exception) use ($container) {
-                /** @var \Psr\Log\LoggerInterface $logger */
-                $logger = $container[LoggerInterface::class];
-                $logger->error('キャッチされなかった例外', ['exception' => $exception]);
-
-                /** @var \Search2d\Presentation\Api\Helper $helper */
-                $helper = $container[Helper::class];
-                return $helper->responseFailure($response, 500, 'Internal Server Error');
-            };
-        };
-
-        $container[App::class] = function (Container $container) {
-            $app = new App($container);
-
-            $this->defineRoutes($app);
-            $this->enableCors($app);
-
-            return $app;
-        };
-    }
-
-    /**
-     * @param \Slim\App $app
-     * @return void
-     */
-    private function defineRoutes(App $app): void
-    {
-        $app->post('/query/img', QueryImgAction::class)->setName('query.img');
-        $app->post('/query/url', QueryUrlAction::class)->setName('query.url');
-        $app->get('/search/{sha1:[a-zA-Z0-9]{40}}', SearchAction::class)->setName('search');
-    }
-
-    /**
-     * @param \Slim\App $app
-     * @return void
-     */
-    private function enableCors(App $app): void
-    {
-        $app->options('/{routes:.+}', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
-            return $response;
-        });
-
-        $app->add(function (ServerRequestInterface $req, ResponseInterface $res, callable $next) {
-            /** @var \Psr\Http\Message\ResponseInterface $response */
-            $response = $next($req, $res);
-            return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'Content-Type')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        });
+        $r->addRoute('POST', '/query/img', QueryImgAction::class);
+        $r->addRoute('POST', '/query/url', QueryUrlAction::class);
+        $r->addRoute('GET', '/search/{sha1:[a-zA-Z0-9]{40}}', SearchAction::class);
     }
 }
