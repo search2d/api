@@ -44,8 +44,7 @@ class QueryImgActionTest extends TestCase
         $file = new UploadedFile(stream_for($fakeImg), strlen($fakeImg), UPLOAD_ERR_OK);
 
         $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
-        $this->assertSame(201, $response->getStatusCode());
-        $this->assertEquals((object)['sha1' => (string)$queriedImage->getSha1()], $this->decodeBody($response));
+        $this->assertSuccessResponse($response, 201, (object)['sha1' => (string)$queriedImage->getSha1()]);
     }
 
     /**

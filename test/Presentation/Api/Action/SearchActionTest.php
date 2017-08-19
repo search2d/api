@@ -42,8 +42,7 @@ class SearchActionTest extends TestCase
         };
 
         $response = $this->call('GET', '/search/' . $sha1);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertEquals([], $this->decodeBody($response));
+        $this->assertSuccessResponse($response, 200, []);
     }
 
     /**

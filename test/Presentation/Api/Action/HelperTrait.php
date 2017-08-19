@@ -26,6 +26,22 @@ trait HelperTrait
     /**
      * @param \Psr\Http\Message\ResponseInterface $response
      * @param int $status
+     * @param mixed|null $data
+     */
+    protected function assertSuccessResponse(ResponseInterface $response, int $status, $data = null): void
+    {
+        $this->assertSame($status, $response->getStatusCode());
+
+        $body = $this->decodeBody($response);
+
+        if ($data !== null) {
+            $this->assertEquals($data, $body);
+        }
+    }
+
+    /**
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param int $status
      * @param null|string $message
      * @return void
      */
@@ -33,13 +49,13 @@ trait HelperTrait
     {
         $this->assertSame($status, $response->getStatusCode());
 
-        $data = $this->decodeBody($response);
+        $body = $this->decodeBody($response);
 
-        $this->assertObjectHasAttribute('error', $data);
-        $this->assertObjectHasAttribute('message', $data->error);
+        $this->assertObjectHasAttribute('error', $body);
+        $this->assertObjectHasAttribute('message', $body->error);
 
         if ($message !== null) {
-            $this->assertSame($data->error->message, $message);
+            $this->assertSame($body->error->message, $message);
         }
     }
 }

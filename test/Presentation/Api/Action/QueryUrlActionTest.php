@@ -41,8 +41,7 @@ class QueryUrlActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/url', ['url' => $fakeUrl]);
-        $this->assertSame(201, $response->getStatusCode());
-        $this->assertEquals((object)['sha1' => (string)$queriedImage->getSha1()], $this->decodeBody($response));
+        $this->assertSuccessResponse($response, 201, (object)['sha1' => (string)$queriedImage->getSha1()]);
     }
 
     /**
