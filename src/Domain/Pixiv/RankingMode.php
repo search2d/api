@@ -8,18 +8,18 @@ namespace Search2d\Domain\Pixiv;
  */
 class RankingMode
 {
-    const MODE_DAY = "day";
-    const MODE_DAY_MALE = "day_male";
-    const MODE_DAY_FEMALE = "day_female";
-    const MODE_DAY_R18 = "day_r18";
-    const MODE_DAY_MALE_R18 = "day_male_r18";
-    const MODE_DAY_FEMALE_R18 = "day_female_r18";
-    const MODE_WEEK = "week";
-    const MODE_WEEK_ORIGINAL = "week_original";
-    const MODE_WEEK_ROOKIE = "week_rookie";
-    const MODE_WEEK_R18 = "week_r18";
-    const MODE_WEEK_R18G = "week_r18g";
-    const MODE_MONTH = "month";
+    public const MODE_DAY = "day";
+    public const MODE_DAY_MALE = "day_male";
+    public const MODE_DAY_FEMALE = "day_female";
+    public const MODE_DAY_R18 = "day_r18";
+    public const MODE_DAY_MALE_R18 = "day_male_r18";
+    public const MODE_DAY_FEMALE_R18 = "day_female_r18";
+    public const MODE_WEEK = "week";
+    public const MODE_WEEK_ORIGINAL = "week_original";
+    public const MODE_WEEK_ROOKIE = "week_rookie";
+    public const MODE_WEEK_R18 = "week_r18";
+    public const MODE_WEEK_R18G = "week_r18g";
+    public const MODE_MONTH = "month";
 
     /** @var string */
     private $value;

@@ -17,9 +17,9 @@ use Search2d\Test\TestCase;
  */
 class SqsReceiverTest extends TestCase
 {
-    const QUEUE_URL = 'http://example.com/';
-    const RECEIPT_HANDLE = 'dummy-handle';
-    const MESSAGE_BODY = 'dummy-body';
+    private const QUEUE_URL = 'http://example.com/';
+    private const RECEIPT_HANDLE = 'dummy-handle';
+    private const MESSAGE_BODY = 'dummy-body';
 
     /**
      * @return void

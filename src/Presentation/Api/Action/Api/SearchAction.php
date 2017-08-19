@@ -14,8 +14,8 @@ use Search2d\Usecase\Search\SearchCommand;
 
 class SearchAction
 {
-    const SEARCH_RADIUS = 5;
-    const SEARCH_COUNT = 10;
+    private const SEARCH_RADIUS = 5;
+    private const SEARCH_COUNT = 10;
 
     /** @var \League\Tactician\CommandBus */
     private $commandBus;

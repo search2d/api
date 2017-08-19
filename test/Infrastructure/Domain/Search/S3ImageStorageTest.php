@@ -17,8 +17,8 @@ use Search2d\Test\TestCase;
  */
 class S3ImageStorageTest extends TestCase
 {
-    const BUCKET = 'bucket';
-    const BASE_URL = 'https://example.com';
+    private const BUCKET = 'bucket';
+    private const BASE_URL = 'https://example.com';
 
     /**
      * @return void
