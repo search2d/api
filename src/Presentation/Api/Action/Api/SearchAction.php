@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Search2d\Domain\Search\Sha1;
 use Search2d\Presentation\Api\Helper;
+use Search2d\Usecase\Search\QueriedImageNotFoundException;
 use Search2d\Usecase\Search\SearchCommand;
 
 class SearchAction
@@ -46,10 +47,14 @@ class SearchAction
             return $this->helper->responseFailure($response, 400, $filter->getFailures()->getMessagesAsString());
         }
 
-        /** @var \Search2d\Domain\Search\ResultCollection $results */
-        $results = $this->commandBus->handle(
-            new SearchCommand(new Sha1($args['sha1']), self::SEARCH_RADIUS, self::SEARCH_COUNT)
-        );
+        try {
+            /** @var \Search2d\Domain\Search\ResultCollection $results */
+            $results = $this->commandBus->handle(
+                new SearchCommand(new Sha1($args['sha1']), self::SEARCH_RADIUS, self::SEARCH_COUNT)
+            );
+        } catch (QueriedImageNotFoundException $e) {
+            return $this->helper->responseFailure($response, 404, '指定されたSHA1に対応する画像が存在しません');
+        }
 
         $data = [];
         /** @var \Search2d\Domain\Search\Result $result */

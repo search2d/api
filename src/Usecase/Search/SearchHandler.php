@@ -47,12 +47,13 @@ class SearchHandler
     /**
      * @param \Search2d\Usecase\Search\SearchCommand $command
      * @return \Search2d\Domain\Search\ResultCollection
+     * @throws \Search2d\Usecase\Search\QueriedImageNotFoundException
      */
     public function __invoke(SearchCommand $command): ResultCollection
     {
         $query = $this->queriedImageRepository->find($command->sha1);
         if (!$query) {
-            throw new \RuntimeException();
+            throw new QueriedImageNotFoundException();
         }
 
         return $this->search($query->getSha1(), $command->radius, $command->count);
