@@ -42,7 +42,6 @@ class QueryUrlAction
 
         $filter = (new FilterFactory())->newSubjectFilter();
         $filter->validate('url')->is('url');
-
         if (!$filter->apply($params)) {
             return $this->helper->responseFailure($response, 403, $filter->getFailures()->getMessagesAsString());
         }

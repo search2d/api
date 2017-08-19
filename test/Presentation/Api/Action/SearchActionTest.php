@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Search2d\Test\Presentation\Api\Action;
 
 use League\Tactician\CommandBus;
+use Prophecy\Argument;
 use Search2d\Container;
 use Search2d\Domain\Search\ResultCollection;
 use Search2d\Domain\Search\Sha1;
@@ -17,6 +18,8 @@ use Search2d\Usecase\Search\SearchCommand;
  */
 class SearchActionTest extends TestCase
 {
+    use HelperTrait;
+
     /**
      * @return void
      */
@@ -34,11 +37,27 @@ class SearchActionTest extends TestCase
             ->shouldBeCalled();
 
         $this->container[SearchAction::class] = function (Container $container) use ($commandBus) {
-            return new SearchAction($commandBus->reveal(), $container[Helper::class]);
+            return new SearchAction($commandBus->reveal(), new Helper());
         };
 
         $response = $this->call('GET', '/search/' . $sha1);
-
         $this->assertSame(200, $response->getStatusCode());
+        $this->assertEquals([], $this->decodeBody($response));
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidSHA1(): void
+    {
+        $commandBus = $this->prophesize(CommandBus::class);
+        $commandBus->handle(Argument::any())->shouldNotBeCalled();
+
+        $this->container[SearchAction::class] = function (Container $container) use ($commandBus) {
+            return new SearchAction($commandBus->reveal(), new Helper());
+        };
+
+        $response = $this->call('GET', '/search/0000000000');
+        $this->assertFailureResponse($response, 404);
     }
 }

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Faker\Factory;
 use Faker\Generator;
+use function GuzzleHttp\Psr7\stream_for;
 use Psr\Http\Message\ResponseInterface;
 use Search2d\Container;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
@@ -90,15 +91,25 @@ class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param string $method
      * @param string $uri
+     * @param string|array|object $body
+     * @param array $headers
+     * @param array $files
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function call(string $method, string $uri): ResponseInterface
+    protected function call(string $method, string $uri, $body = '', array $headers = [], array $files = []): ResponseInterface
     {
-        $request = new ServerRequest([], [], $uri, $method);
-        $response = new Response();
+        if (is_array($body) || is_object($body)) {
+            $body = json_encode($body);
+            if ($body === false) {
+                throw new \RuntimeException(json_last_error_msg(), json_last_error());
+            }
+            $headers['Content-Type'] = 'application/json;charset=utf-8';
+        }
+
+        $request = new ServerRequest([], $files, $uri, $method, stream_for($body), $headers);
 
         /** @var \Search2d\Infrastructure\Presentation\Api\Frontend $frontend */
         $frontend = $this->container[Frontend::class];
-        return $frontend->handle($request, $response);
+        return $frontend->handle($request, new Response());
     }
 }

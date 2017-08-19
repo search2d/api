@@ -8,7 +8,6 @@ use League\Tactician\CommandBus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Search2d\Domain\Search\Sha1;
-use Search2d\Domain\Search\Sha1ValidationException;
 use Search2d\Presentation\Api\Helper;
 use Search2d\Usecase\Search\SearchCommand;
 
@@ -43,22 +42,16 @@ class SearchAction
     {
         $filter = (new FilterFactory())->newSubjectFilter();
         $filter->validate('sha1')->is('regex', '/^[a-zA-Z0-9]{40}$/');
-
         if (!$filter->apply($args)) {
             return $this->helper->responseFailure($response, 403, $filter->getFailures()->getMessagesAsString());
         }
 
-        try {
-            $sha1 = new Sha1($args['sha1']);
-        } catch (Sha1ValidationException $e) {
-            return $this->helper->responseFailure($response, 403, $e->getMessage());
-        }
-
         /** @var \Search2d\Domain\Search\ResultCollection $results */
-        $results = $this->commandBus->handle(new SearchCommand($sha1, self::SEARCH_RADIUS, self::SEARCH_COUNT));
+        $results = $this->commandBus->handle(
+            new SearchCommand(new Sha1($args['sha1']), self::SEARCH_RADIUS, self::SEARCH_COUNT)
+        );
 
         $data = [];
-
         /** @var \Search2d\Domain\Search\Result $result */
         foreach ($results as $result) {
             $data[] = [
