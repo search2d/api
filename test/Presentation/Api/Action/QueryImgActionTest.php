@@ -61,7 +61,7 @@ class QueryImgActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/img');
-        $this->assertFailureResponse($response, 403);
+        $this->assertFailureResponse($response, 400);
     }
 
     /**
@@ -82,7 +82,7 @@ class QueryImgActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
-        $this->assertFailureResponse($response, 403);
+        $this->assertFailureResponse($response, 400);
     }
 
     /**
@@ -102,6 +102,6 @@ class QueryImgActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
-        $this->assertFailureResponse($response, 403);
+        $this->assertFailureResponse($response, 400);
     }
 }

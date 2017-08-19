@@ -43,7 +43,7 @@ class SearchAction
         $filter = (new FilterFactory())->newSubjectFilter();
         $filter->validate('sha1')->is('regex', '/^[a-zA-Z0-9]{40}$/');
         if (!$filter->apply($args)) {
-            return $this->helper->responseFailure($response, 403, $filter->getFailures()->getMessagesAsString());
+            return $this->helper->responseFailure($response, 400, $filter->getFailures()->getMessagesAsString());
         }
 
         /** @var \Search2d\Domain\Search\ResultCollection $results */

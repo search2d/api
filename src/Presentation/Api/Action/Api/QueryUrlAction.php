@@ -37,13 +37,13 @@ class QueryUrlAction
     {
         $params = json_decode($request->getBody()->getContents());
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->helper->responseFailure($response, 403, json_last_error_msg());
+            return $this->helper->responseFailure($response, 400, json_last_error_msg());
         }
 
         $filter = (new FilterFactory())->newSubjectFilter();
         $filter->validate('url')->is('url');
         if (!$filter->apply($params)) {
-            return $this->helper->responseFailure($response, 403, $filter->getFailures()->getMessagesAsString());
+            return $this->helper->responseFailure($response, 400, $filter->getFailures()->getMessagesAsString());
         }
 
         /** @var \Search2d\Domain\Search\QueriedImage $queriedImage */

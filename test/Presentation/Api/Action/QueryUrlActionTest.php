@@ -58,7 +58,7 @@ class QueryUrlActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/url', 'invalid json');
-        $this->assertFailureResponse($response, 403);
+        $this->assertFailureResponse($response, 400);
     }
 
     /**
@@ -74,6 +74,6 @@ class QueryUrlActionTest extends TestCase
         };
 
         $response = $this->call('POST', '/query/url', ['url' => 'invalid url']);
-        $this->assertFailureResponse($response, 403);
+        $this->assertFailureResponse($response, 400);
     }
 }

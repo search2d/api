@@ -39,19 +39,19 @@ class QueryImgAction
         /** @var \Psr\Http\Message\UploadedFileInterface[] $uploadedFiles */
         $uploadedFiles = $request->getUploadedFiles();
         if (!isset($uploadedFiles['img'])) {
-            return $this->helper->responseFailure($response, 403, '画像のアップロードに失敗');
+            return $this->helper->responseFailure($response, 400, '画像のアップロードに失敗');
         }
 
         $uploadedFile = $uploadedFiles['img'];
 
         if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
-            return $this->helper->responseFailure($response, 403, '画像のアップロードに失敗');
+            return $this->helper->responseFailure($response, 400, '画像のアップロードに失敗');
         }
 
         try {
             $image = Image::create($uploadedFile->getStream()->getContents());
         } catch (ImageValidationException $e) {
-            return $this->helper->responseFailure($response, 403, $e->getMessage());
+            return $this->helper->responseFailure($response, 400, $e->getMessage());
         }
 
         /** @var \Search2d\Domain\Search\QueriedImage $queriedImage */
