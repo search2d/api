@@ -12,6 +12,9 @@ use Search2d\Test\TestCase;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 
+/**
+ * @covers  \Search2d\Infrastructure\Presentation\Api\RouterMiddleware
+ */
 class RouterMiddlewareTest extends TestCase
 {
     /**
