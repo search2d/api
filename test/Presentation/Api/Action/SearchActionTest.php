@@ -41,7 +41,7 @@ class SearchActionTest extends TestCase
             return new SearchAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('GET', '/search/' . $sha1);
+        $response = $this->call('GET', '/api/search/' . $sha1);
         $this->assertSuccessResponse($response, 200, []);
     }
 
@@ -57,7 +57,7 @@ class SearchActionTest extends TestCase
             return new SearchAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('GET', '/search/0000000000');
+        $response = $this->call('GET', '/api/search/0000000000');
         $this->assertFailureResponse($response, 404);
     }
 
@@ -79,7 +79,7 @@ class SearchActionTest extends TestCase
             return new SearchAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('GET', '/search/' . $sha1);
+        $response = $this->call('GET', '/api/search/' . $sha1);
         $this->assertFailureResponse($response, 404);
     }
 }

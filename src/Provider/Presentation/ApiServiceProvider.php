@@ -11,7 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Search2d\Infrastructure\Presentation\Api\ActionMiddleware;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
-use Search2d\Infrastructure\Presentation\Api\OptionsResponderMiddleware;
 use Search2d\Infrastructure\Presentation\Api\RouterMiddleware;
 use Search2d\Presentation\Api\Action\Api\QueryImgAction;
 use Search2d\Presentation\Api\Action\Api\QueryUrlAction;
@@ -40,14 +39,9 @@ class ApiServiceProvider implements ServiceProviderInterface
     {
         $container[Frontend::class] = function (Container $container) {
             return new Frontend([
-                $container[OptionsResponderMiddleware::class],
                 $container[RouterMiddleware::class],
                 $container[ActionMiddleware::class],
             ]);
-        };
-
-        $container[OptionsResponderMiddleware::class] = function (Container $container) {
-            return new OptionsResponderMiddleware();
         };
 
         $container[RouterMiddleware::class] = function (Container $container) {
@@ -116,8 +110,10 @@ class ApiServiceProvider implements ServiceProviderInterface
      */
     private function routeDefinition(RouteCollector $r): void
     {
-        $r->addRoute('POST', '/query/img', QueryImgAction::class);
-        $r->addRoute('POST', '/query/url', QueryUrlAction::class);
-        $r->addRoute('GET', '/search/{sha1:[a-zA-Z0-9]{40}}', SearchAction::class);
+        $r->addGroup('/api', function (RouteCollector $r) {
+            $r->addRoute('POST', '/query/img', QueryImgAction::class);
+            $r->addRoute('POST', '/query/url', QueryUrlAction::class);
+            $r->addRoute('GET', '/search/{sha1:[a-zA-Z0-9]{40}}', SearchAction::class);
+        });
     }
 }

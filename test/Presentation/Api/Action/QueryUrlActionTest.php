@@ -40,7 +40,7 @@ class QueryUrlActionTest extends TestCase
             return new QueryUrlAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/url', ['url' => $fakeUrl]);
+        $response = $this->call('POST', '/api/query/url', ['url' => $fakeUrl]);
         $this->assertSuccessResponse($response, 201, (object)['sha1' => (string)$queriedImage->getSha1()]);
     }
 
@@ -56,7 +56,7 @@ class QueryUrlActionTest extends TestCase
             return new QueryUrlAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/url', 'invalid json');
+        $response = $this->call('POST', '/api/query/url', 'invalid json');
         $this->assertFailureResponse($response, 400);
     }
 
@@ -72,7 +72,7 @@ class QueryUrlActionTest extends TestCase
             return new QueryUrlAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/url', ['url' => 'invalid url']);
+        $response = $this->call('POST', '/api/query/url', ['url' => 'invalid url']);
         $this->assertFailureResponse($response, 400);
     }
 }

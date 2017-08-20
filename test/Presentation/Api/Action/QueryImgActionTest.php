@@ -43,7 +43,7 @@ class QueryImgActionTest extends TestCase
 
         $file = new UploadedFile(stream_for($fakeImg), strlen($fakeImg), UPLOAD_ERR_OK);
 
-        $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
+        $response = $this->call('POST', '/api/query/img', '', [], ['img' => $file]);
         $this->assertSuccessResponse($response, 201, (object)['sha1' => (string)$queriedImage->getSha1()]);
     }
 
@@ -59,7 +59,7 @@ class QueryImgActionTest extends TestCase
             return new QueryImgAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/img');
+        $response = $this->call('POST', '/api/query/img');
         $this->assertFailureResponse($response, 400);
     }
 
@@ -80,7 +80,7 @@ class QueryImgActionTest extends TestCase
             return new QueryImgAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
+        $response = $this->call('POST', '/api/query/img', '', [], ['img' => $file]);
         $this->assertFailureResponse($response, 400);
     }
 
@@ -100,7 +100,7 @@ class QueryImgActionTest extends TestCase
             return new QueryImgAction($commandBus->reveal(), new Helper());
         };
 
-        $response = $this->call('POST', '/query/img', '', [], ['img' => $file]);
+        $response = $this->call('POST', '/api/query/img', '', [], ['img' => $file]);
         $this->assertFailureResponse($response, 400);
     }
 }
