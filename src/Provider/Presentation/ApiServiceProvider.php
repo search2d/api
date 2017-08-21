@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Search2d\Infrastructure\Presentation\Api\ActionMiddleware;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
 use Search2d\Infrastructure\Presentation\Api\RouterMiddleware;
+use Search2d\Presentation\Api\Action\Api\HealthAction;
 use Search2d\Presentation\Api\Action\Api\QueryImgAction;
 use Search2d\Presentation\Api\Action\Api\QueryUrlAction;
 use Search2d\Presentation\Api\Action\Api\SearchAction;
@@ -91,6 +92,10 @@ class ApiServiceProvider implements ServiceProviderInterface
         $container[QueryUrlAction::class] = function (Container $container) {
             return new QueryUrlAction($container[CommandBus::class], $container[Helper::class]);
         };
+
+        $container[HealthAction::class] = function (Container $container) {
+            return new HealthAction($container[Helper::class]);
+        };
     }
 
     /**
@@ -114,6 +119,7 @@ class ApiServiceProvider implements ServiceProviderInterface
             $r->addRoute('POST', '/query/img', QueryImgAction::class);
             $r->addRoute('POST', '/query/url', QueryUrlAction::class);
             $r->addRoute('GET', '/search/{sha1:[a-zA-Z0-9]{40}}', SearchAction::class);
+            $r->addRoute('GET', '/health', HealthAction::class);
         });
     }
 }
