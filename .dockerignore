@@ -1,7 +1,2 @@
-*
-!/src
-!/docker
-!/migrations
-!/migrations.yml
-!/*.php
-!/composer.*
+/test
+/vendor
