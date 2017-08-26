@@ -9,6 +9,13 @@ return [
         'name' => env_str('API_LOGGER_NAME'),
         'path' => env_str('API_LOGGER_PATH'),
         'level' => env_str('API_LOGGER_LEVEL'),
+        'cwl' => [
+            'region' => env_str('API_LOGGER_CWL_REGION', ''),
+            'group' => env_str('API_LOGGER_CWL_GROUP', ''),
+            'stream' => env_str('API_LOGGER_CWL_STREAM', ''),
+            'retention_days' => env_int('API_LOGGER_CWL_RETENTION_DAYS', 7),
+            'batch_size' => env_int('API_LOGGER_CWL_BATCH_SIZE', 1),
+        ],
     ],
     'router' => [
         'cache_file' => env_str('API_ROUTER_CACHE_FILE', ''),

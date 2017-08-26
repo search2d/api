@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d08b12be65ed1079121e745fe4a56f2",
+    "content-hash": "4bac228414f84b094b93078e5ff47e39",
     "packages": [
         {
             "name": "aura/filter",
@@ -987,6 +987,54 @@
                 "service layer"
             ],
             "time": "2016-02-20T11:14:36+00:00"
+        },
+        {
+            "name": "maxbanton/cwh",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maxbanton/cwh.git",
+                "reference": "83ad99e562ed1893c8f65f68f2121cbf41f8b9c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maxbanton/cwh/zipball/83ad99e562ed1893c8f65f68f2121cbf41f8b9c0",
+                "reference": "83ad99e562ed1893c8f65f68f2121cbf41f8b9c0",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.18",
+                "monolog/monolog": "^1.20"
+            },
+            "require-dev": {
+                "maxbanton/dd": "^0.2.0",
+                "phpunit/phpunit": "^5.4",
+                "satooshi/php-coveralls": "^1.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maxbanton\\Cwh\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Max Leonov",
+                    "email": "hi@maxleonov.pw"
+                }
+            ],
+            "description": "AWS CloudWatch Handler for Monolog library",
+            "keywords": [
+                "aws",
+                "cloudwatch",
+                "monolog"
+            ],
+            "time": "2017-03-04T18:29:43+00:00"
         },
         {
             "name": "monolog/monolog",

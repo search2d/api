@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Search2d\Provider;
 
-use Monolog\Handler\StreamHandler;
+use Aws\CloudWatchLogs\CloudWatchLogsClient;
+use Maxbanton\Cwh\Handler\CloudWatch;
 use Monolog\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -18,9 +19,24 @@ class LoggerServiceProvider implements ServiceProviderInterface
     public function register(Container $container): void
     {
         $container[LoggerInterface::class] = function (Container $container) {
-            $config = $container['config'];
-            $logger = new Logger($config->logger->name);
-            $logger->pushHandler(new StreamHandler($config->logger->path, $config->logger->level));
+            $config = $container['config']->logger;
+
+            $cwl = new CloudWatchLogsClient([
+                'version' => '2014-03-28',
+                'region' => $config->cwl->region,
+            ]);
+
+            $handler = new CloudWatch(
+                $cwl,
+                $config->cwl->group,
+                $config->cwl->stream,
+                $config->cwl->retention_days,
+                $config->cwl->batch_size
+            );
+
+            $logger = new Logger($config->name);
+            $logger->pushHandler($handler);
+
             return $logger;
         };
     }
