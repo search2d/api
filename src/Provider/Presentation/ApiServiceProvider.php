@@ -9,7 +9,9 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Search2d\Infrastructure\Presentation\Api\ActionMiddleware;
+use Search2d\Infrastructure\Presentation\Api\ExceptionMiddleware;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
 use Search2d\Infrastructure\Presentation\Api\RouterMiddleware;
 use Search2d\Presentation\Api\Action\Api\HealthAction;
@@ -40,9 +42,14 @@ class ApiServiceProvider implements ServiceProviderInterface
     {
         $container[Frontend::class] = function (Container $container) {
             return new Frontend([
+                $container[ExceptionMiddleware::class],
                 $container[RouterMiddleware::class],
                 $container[ActionMiddleware::class],
             ]);
+        };
+
+        $container[ExceptionMiddleware::class] = function (Container $container) {
+            return new ExceptionMiddleware($container[LoggerInterface::class]);
         };
 
         $container[RouterMiddleware::class] = function (Container $container) {
