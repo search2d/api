@@ -16,7 +16,6 @@
     "aws/aws-sdk-php": "^3.33",
     "cakephp/chronos": "^1.1",
     "netresearch/jsonmapper": "^1.2",
-    "symfony/debug": "^3.3",
     "maxbanton/cwh": "^1.0"
   },
   "require-dev": {

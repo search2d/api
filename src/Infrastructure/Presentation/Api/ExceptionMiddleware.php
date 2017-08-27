@@ -6,7 +6,6 @@ namespace Search2d\Infrastructure\Presentation\Api;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\Exception\FlattenException;
 use Zend\Diactoros\Response;
 
 class ExceptionMiddleware
@@ -33,15 +32,7 @@ class ExceptionMiddleware
         try {
             return $next($request, $response);
         } catch (\Exception $exception) {
-            $json = json_encode(FlattenException::create($exception)->toArray());
-            if ($json === false) {
-                throw new \RuntimeException(json_last_error_msg(), json_last_error());
-            }
-
-            $this->logger->error($json, [
-                'method' => $request->getMethod(),
-                'uri' => (string)$request->getUri(),
-            ]);
+            $this->logger->error('Uncaught exception', ['exception' => $exception]);
 
             return (new Response())->withStatus(500);
         }

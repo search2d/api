@@ -5,6 +5,7 @@ namespace Search2d\Provider;
 
 use Aws\CloudWatchLogs\CloudWatchLogsClient;
 use Maxbanton\Cwh\Handler\CloudWatch;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -21,18 +22,17 @@ class LoggerServiceProvider implements ServiceProviderInterface
         $container[LoggerInterface::class] = function (Container $container) {
             $config = $container['config']->logger;
 
-            $cwl = new CloudWatchLogsClient([
-                'version' => '2014-03-28',
-                'region' => $config->cwl->region,
-            ]);
+            $formatter = new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);
+            $formatter->includeStacktraces();
 
             $handler = new CloudWatch(
-                $cwl,
+                new CloudWatchLogsClient(['version' => '2014-03-28', 'region' => $config->cwl->region]),
                 $config->cwl->group,
                 $config->cwl->stream,
                 $config->cwl->retention_days,
                 $config->cwl->batch_size
             );
+            $handler->setFormatter($formatter);
 
             $logger = new Logger($config->name);
             $logger->pushHandler($handler);
