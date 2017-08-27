@@ -34,12 +34,18 @@ class PixivServiceProvider implements ServiceProviderInterface
         $container[RemoteRepository::class] = function (Container $container) {
             $pixiv = $container['config']->pixiv;
 
+            $options = [
+                RequestOptions::DELAY => $pixiv->api->delay,
+                RequestOptions::TIMEOUT => $pixiv->api->timeout,
+                RequestOptions::CONNECT_TIMEOUT => $pixiv->api->connection_timeout,
+            ];
+
+            if ($pixiv->api->proxy) {
+                $options[RequestOptions::PROXY] = $pixiv->api->proxy;
+            }
+
             $apiClient = new ApiClient(
-                new Client([
-                    RequestOptions::DELAY => $pixiv->api->delay,
-                    RequestOptions::TIMEOUT => $pixiv->api->timeout,
-                    RequestOptions::CONNECT_TIMEOUT => $pixiv->api->connection_timeout,
-                ]),
+                new Client($options),
                 $pixiv->api->username,
                 $pixiv->api->password,
                 $pixiv->api->client_id,

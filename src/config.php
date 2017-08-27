@@ -48,6 +48,7 @@ return [
             'delay' => env_int('API_PIXIV_API_DELAY', 1500),
             'timeout' => env_float('API_PIXIV_API_TIMEOUT', 10.0),
             'connection_timeout' => env_float('API_PIXIV_API_TIMEOUT', 10.0),
+            'proxy' => env_str('API_PIXIV_API_PROXY', ""),
         ],
         'sqs' => [
             'region' => env_str('API_PIXIV_SQS_REGION'),

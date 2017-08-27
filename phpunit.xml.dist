@@ -40,6 +40,7 @@
         <env name="API_PIXIV_API_PASSWORD" value=""/>
         <env name="API_PIXIV_API_CLIENT_ID" value=""/>
         <env name="API_PIXIV_API_CLIENT_SECRET" value=""/>
+        <env name="API_PIXIV_API_PROXY" value=""/>
         <env name="API_PIXIV_SQS_REGION" value=""/>
         <env name="API_PIXIV_SQS_REQUEST_ILLUST_URL" value=""/>
         <env name="API_PIXIV_SQS_REQUEST_RANKING_URL" value=""/>
