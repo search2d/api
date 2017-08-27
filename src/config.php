@@ -45,9 +45,9 @@ return [
             'password' => env_str('API_PIXIV_API_PASSWORD'),
             'client_id' => env_str('API_PIXIV_API_CLIENT_ID'),
             'client_secret' => env_str('API_PIXIV_API_CLIENT_SECRET'),
-            'delay' => env_int('API_PIXIV_API_DELAY', 2000),
-            'timeout' => env_float('API_PIXIV_API_TIMEOUT', 5.0),
-            'connection_timeout' => env_float('API_PIXIV_API_TIMEOUT', 3.0),
+            'delay' => env_int('API_PIXIV_API_DELAY', 1500),
+            'timeout' => env_float('API_PIXIV_API_TIMEOUT', 10.0),
+            'connection_timeout' => env_float('API_PIXIV_API_TIMEOUT', 10.0),
         ],
         'sqs' => [
             'region' => env_str('API_PIXIV_SQS_REGION'),
