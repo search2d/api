@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "416ea6ae4b1e15726dfb4024d545a35d",
+    "content-hash": "7caec7c4410042888b83b7dd89234432",
     "packages": [
         {
             "name": "aura/filter",
@@ -757,6 +757,59 @@
             "time": "2016-12-25T22:54:00+00:00"
         },
         {
+            "name": "fluent/logger",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fluent/fluent-logger-php.git",
+                "reference": "c5a19ba8eb5e15f9ade72afeffba6b6e7eb51155"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fluent/fluent-logger-php/zipball/c5a19ba8eb5e15f9ade72afeffba6b6e7eb51155",
+                "reference": "c5a19ba8eb5e15f9ade72afeffba6b6e7eb51155",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.3",
+                "phpunit/phpunit-mock-objects": "2.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fluent\\Logger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache"
+            ],
+            "authors": [
+                {
+                    "name": "Shuhei Tanuma",
+                    "email": "chobieee@gmail.com"
+                },
+                {
+                    "name": "Sotaro Karasawa",
+                    "email": "sotarok@crocos.co.jp"
+                },
+                {
+                    "name": "DQNEO",
+                    "email": "dqneoo@gmail.com"
+                }
+            ],
+            "description": "a logging library for Fluentd",
+            "homepage": "http://github.com/fluent/fluent-logger-php",
+            "keywords": [
+                "log",
+                "logging"
+            ],
+            "time": "2017-02-15T07:14:53+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.3.0",
             "source": {
@@ -987,54 +1040,6 @@
                 "service layer"
             ],
             "time": "2016-02-20T11:14:36+00:00"
-        },
-        {
-            "name": "maxbanton/cwh",
-            "version": "v1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/maxbanton/cwh.git",
-                "reference": "83ad99e562ed1893c8f65f68f2121cbf41f8b9c0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/maxbanton/cwh/zipball/83ad99e562ed1893c8f65f68f2121cbf41f8b9c0",
-                "reference": "83ad99e562ed1893c8f65f68f2121cbf41f8b9c0",
-                "shasum": ""
-            },
-            "require": {
-                "aws/aws-sdk-php": "^3.18",
-                "monolog/monolog": "^1.20"
-            },
-            "require-dev": {
-                "maxbanton/dd": "^0.2.0",
-                "phpunit/phpunit": "^5.4",
-                "satooshi/php-coveralls": "^1.0",
-                "squizlabs/php_codesniffer": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Maxbanton\\Cwh\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Max Leonov",
-                    "email": "hi@maxleonov.pw"
-                }
-            ],
-            "description": "AWS CloudWatch Handler for Monolog library",
-            "keywords": [
-                "aws",
-                "cloudwatch",
-                "monolog"
-            ],
-            "time": "2017-03-04T18:29:43+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1566,6 +1571,48 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "rybakit/msgpack",
+            "version": "v0.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rybakit/msgpack.php.git",
+                "reference": "62ef0f629dbbe855ffed38d1b4c4d1130b6195a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rybakit/msgpack.php/zipball/62ef0f629dbbe855ffed38d1b4c4d1130b6195a9",
+                "reference": "62ef0f629dbbe855ffed38d1b4c4d1130b6195a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MessagePack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eugene Leonovich",
+                    "email": "gen.work@gmail.com"
+                }
+            ],
+            "description": "A pure PHP implementation of the MessagePack serialization format.",
+            "keywords": [
+                "messagepack",
+                "msgpack",
+                "pure",
+                "streaming"
+            ],
+            "time": "2017-03-11T15:48:37+00:00"
         },
         {
             "name": "symfony/console",

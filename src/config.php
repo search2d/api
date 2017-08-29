@@ -7,14 +7,17 @@ return [
     ],
     'logger' => [
         'name' => env_str('API_LOGGER_NAME'),
-        'path' => env_str('API_LOGGER_PATH'),
-        'level' => env_str('API_LOGGER_LEVEL'),
-        'cwl' => [
-            'region' => env_str('API_LOGGER_CWL_REGION', ''),
-            'group' => env_str('API_LOGGER_CWL_GROUP', ''),
-            'stream' => env_str('API_LOGGER_CWL_STREAM', ''),
-            'retention_days' => env_int('API_LOGGER_CWL_RETENTION_DAYS', 7),
-            'batch_size' => env_int('API_LOGGER_CWL_BATCH_SIZE', 1),
+        'stream' => [
+            'enabled' => env_bool('API_LOGGER_STREAM_ENABLED', false),
+            'path' => env_str('API_LOGGER_STREAM_PATH', ''),
+            'level' => env_str('API_LOGGER_STREAM_LEVEL', ''),
+        ],
+        'fluent' => [
+            'enabled' => env_bool('API_LOGGER_FLUENT_ENABLED', false),
+            'tag' => env_str('API_LOGGER_FLUENT_TAG', ''),
+            'host' => env_str('API_LOGGER_FLUENT_HOST', ''),
+            'port' => env_str('API_LOGGER_FLUENT_PORT', ''),
+            'level' => env_str('API_LOGGER_FLUENT_LEVEL', ''),
         ],
     ],
     'router' => [

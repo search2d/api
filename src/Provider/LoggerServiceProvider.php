@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Search2d\Provider;
 
-use Aws\CloudWatchLogs\CloudWatchLogsClient;
-use Maxbanton\Cwh\Handler\CloudWatch;
+use Fluent\Logger\FluentLogger;
 use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
+use Search2d\Infrastructure\Logger\FluentHandler;
+use Search2d\Infrastructure\Logger\MessagePackPacker;
 
 class LoggerServiceProvider implements ServiceProviderInterface
 {
@@ -22,20 +24,33 @@ class LoggerServiceProvider implements ServiceProviderInterface
         $container[LoggerInterface::class] = function (Container $container) {
             $config = $container['config']->logger;
 
-            $formatter = new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);
-            $formatter->includeStacktraces();
-
-            $handler = new CloudWatch(
-                new CloudWatchLogsClient(['version' => '2014-03-28', 'region' => $config->cwl->region]),
-                $config->cwl->group,
-                $config->cwl->stream,
-                $config->cwl->retention_days,
-                $config->cwl->batch_size
-            );
-            $handler->setFormatter($formatter);
-
             $logger = new Logger($config->name);
-            $logger->pushHandler($handler);
+
+            if ($config->stream->enabled) {
+                $handler = new StreamHandler(
+                    $config->stream->path,
+                    Logger::toMonologLevel($config->stream->level)
+                );
+
+                $logger->pushHandler($handler);
+            }
+
+            if ($config->fluent->enabled) {
+                $formatter = new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);
+                $formatter->includeStacktraces();
+
+                $fluent = new FluentLogger($config->fluent->host, $config->fluent->port);
+                $fluent->setPacker(new MessagePackPacker());
+
+                $handler = new FluentHandler(
+                    $fluent,
+                    $config->fluent->tag,
+                    Logger::toMonologLevel($config->fluent->level)
+                );
+                $handler->setFormatter($formatter);
+
+                $logger->pushHandler($handler);
+            }
 
             return $logger;
         };
