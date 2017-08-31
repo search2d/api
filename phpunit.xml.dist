@@ -29,6 +29,8 @@
         <env name="API_LOGGER_FLUENT_HOST" value=""/>
         <env name="API_LOGGER_FLUENT_PORT" value=""/>
         <env name="API_LOGGER_FLUENT_LEVEL" value=""/>
+        <env name="API_LOGGER_FLUENT_UID_PATH" value=""/>
+        <env name="API_LOGGER_FLUENT_LOG_GROUP_NAME" value=""/>
         <env name="API_ROUTER_CACHE_FILE" value=""/>
         <env name="API_ROUTER_CACHE_DISABLED" value="true"/>
         <env name="API_SEARCH_S3_REGION" value=""/>

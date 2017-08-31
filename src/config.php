@@ -18,6 +18,8 @@ return [
             'host' => env_str('API_LOGGER_FLUENT_HOST', ''),
             'port' => env_str('API_LOGGER_FLUENT_PORT', ''),
             'level' => env_str('API_LOGGER_FLUENT_LEVEL', ''),
+            'uid_path' => env_str('API_LOGGER_FLUENT_UID_PATH', ''),
+            'log_group_name' => env_str('API_LOGGER_FLUENT_LOG_GROUP_NAME', ''),
         ],
     ],
     'router' => [

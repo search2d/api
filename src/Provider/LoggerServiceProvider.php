@@ -45,6 +45,8 @@ class LoggerServiceProvider implements ServiceProviderInterface
                 $handler = new FluentHandler(
                     $fluent,
                     $config->fluent->tag,
+                    $config->fluent->log_group_name,
+                    $config->fluent->uid_path,
                     Logger::toMonologLevel($config->fluent->level)
                 );
                 $handler->setFormatter($formatter);
