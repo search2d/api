@@ -39,7 +39,7 @@ class IndexHandler
      * @param \Search2d\Usecase\Search\IndexCommand $command
      * @return void
      */
-    public function __invoke(IndexCommand $command): void
+    public function handle(IndexCommand $command): void
     {
         $this->indexedImageRepository->save(IndexedImage::create($command->image, $command->detail));
 

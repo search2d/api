@@ -25,9 +25,9 @@ class CommandMapper
 
     /**
      * @param string $commandName
-     * @return callable|null
+     * @return object
      */
-    public function __invoke(string $commandName): ?callable
+    public function __invoke(string $commandName)
     {
         if (!isset($this->mapping[$commandName])) {
             return null;

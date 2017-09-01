@@ -8,7 +8,7 @@ use League\Tactician\CommandBus;
 use League\Tactician\Handler\CommandHandlerMiddleware;
 use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\Handler\Locator\CallableLocator;
-use League\Tactician\Handler\MethodNameInflector\InvokeInflector;
+use League\Tactician\Handler\MethodNameInflector\HandleInflector;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Search2d\Infrastructure\Usecase\CommandMapper;
@@ -32,7 +32,7 @@ class CommandBusServiceProvider implements ServiceProviderInterface
                 new CommandHandlerMiddleware(
                     new ClassNameExtractor(),
                     new CallableLocator($container[CommandMapper::class]),
-                    new InvokeInflector()
+                    new HandleInflector()
                 ),
             ]);
         };

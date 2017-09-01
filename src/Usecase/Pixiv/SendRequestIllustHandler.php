@@ -23,7 +23,7 @@ class SendRequestIllustHandler
      * @param \Search2d\Usecase\Pixiv\SendRequestIllustCommand $command
      * @return void
      */
-    public function __invoke(SendRequestIllustCommand $command): void
+    public function handle(SendRequestIllustCommand $command): void
     {
         $this->requestSender->send(new RequestIllust($command->illustId));
     }

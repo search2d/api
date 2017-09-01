@@ -18,6 +18,7 @@ use Search2d\Test\TestCase;
 use Search2d\Usecase\Pixiv\HandleRequestIllustCommand;
 use Search2d\Usecase\Pixiv\HandleRequestIllustHandler;
 use Search2d\Usecase\Search\IndexCommand;
+use Search2d\Usecase\Search\IndexHandler;
 
 /**
  * @covers \Search2d\Usecase\Pixiv\HandleRequestIllustHandler
@@ -60,18 +61,18 @@ class HandleRequestIllustHandlerTest extends TestCase
             ->willReturn($fakeImage)
             ->shouldBeCalled();
 
-        $commandBus = $this->prophesize(CommandBus::class);
-        $commandBus->handle(Argument::type(IndexCommand::class))
+        $indexHandler = $this->prophesize(IndexHandler::class);
+        $indexHandler->handle(Argument::type(IndexCommand::class))
             ->shouldBeCalled();
 
         $handler = new HandleRequestIllustHandler(
             $requestReceiver->reveal(),
             $remoteRepository->reveal(),
-            $commandBus->reveal(),
+            $indexHandler->reveal(),
             new NullLogger()
         );
 
-        call_user_func($handler, new HandleRequestIllustCommand());
+        $handler->handle(new HandleRequestIllustCommand());
 
         $this->assertTrue($success);
     }

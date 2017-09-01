@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Search2d\Usecase\Pixiv;
 
-use League\Tactician\CommandBus;
 use Psr\Log\LoggerInterface;
 use Search2d\Domain\Pixiv\RemoteRepository;
 use Search2d\Domain\Pixiv\RequestIllust;
 use Search2d\Domain\Pixiv\RequestIllustReceiver;
 use Search2d\Domain\Search\Detail;
 use Search2d\Usecase\Search\IndexCommand;
+use Search2d\Usecase\Search\IndexHandler;
 
 class HandleRequestIllustHandler
 {
@@ -19,8 +19,8 @@ class HandleRequestIllustHandler
     /** @var \Search2d\Domain\Pixiv\RemoteRepository */
     private $remoteRepository;
 
-    /** @var \League\Tactician\CommandBus */
-    private $commandBus;
+    /** @var \Search2d\Usecase\Search\IndexHandler */
+    private $indexHandler;
 
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
@@ -28,19 +28,19 @@ class HandleRequestIllustHandler
     /**
      * @param \Search2d\Domain\Pixiv\RequestIllustReceiver $requestIllustReceiver
      * @param \Search2d\Domain\Pixiv\RemoteRepository $remoteRepository
-     * @param \League\Tactician\CommandBus $commandBus
+     * @param \Search2d\Usecase\Search\IndexHandler $indexHandler
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         RequestIllustReceiver $requestIllustReceiver,
         RemoteRepository $remoteRepository,
-        CommandBus $commandBus,
+        IndexHandler $indexHandler,
         LoggerInterface $logger
     )
     {
         $this->requestIllustReceiver = $requestIllustReceiver;
         $this->remoteRepository = $remoteRepository;
-        $this->commandBus = $commandBus;
+        $this->indexHandler = $indexHandler;
         $this->logger = $logger;
     }
 
@@ -48,7 +48,7 @@ class HandleRequestIllustHandler
      * @param \Search2d\Usecase\Pixiv\HandleRequestIllustCommand $command
      * @return void
      */
-    public function __invoke(HandleRequestIllustCommand $command): void
+    public function handle(HandleRequestIllustCommand $command): void
     {
         $this->requestIllustReceiver->receive(function (RequestIllust $request): bool {
             try {
@@ -90,7 +90,7 @@ class HandleRequestIllustHandler
         foreach ($illust->getPages() as $page) {
             $image = $this->remoteRepository->getImage($page->getImageUrl());
 
-            $this->commandBus->handle(new IndexCommand($image, $detail));
+            $this->indexHandler->handle(new IndexCommand($image, $detail));
         }
     }
 }

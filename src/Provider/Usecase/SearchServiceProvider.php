@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Search2d\Provider\Usecase;
 
-use League\Tactician\CommandBus;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
@@ -49,7 +48,7 @@ class SearchServiceProvider implements ServiceProviderInterface
         $container[QueryUrlHandler::class] = function (Container $container) {
             return new QueryUrlHandler(
                 $container[ImageFetcher::class],
-                $container[CommandBus::class]
+                $container[QueryImgHandler::class]
             );
         };
 

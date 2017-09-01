@@ -47,7 +47,7 @@ class HandleRequestRankingHandler
      * @param \Search2d\Usecase\Pixiv\HandleRequestRankingCommand $command
      * @return void
      */
-    public function __invoke(HandleRequestRankingCommand $command): void
+    public function handle(HandleRequestRankingCommand $command): void
     {
         $this->requestRankingReceiver->receive(function (RequestRanking $request): bool {
             try {

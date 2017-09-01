@@ -29,7 +29,7 @@ class QueryImgHandler
      * @param \Search2d\Usecase\Search\QueryImgCommand $command
      * @return \Search2d\Domain\Search\QueriedImage
      */
-    public function __invoke(QueryImgCommand $command): QueriedImage
+    public function handle(QueryImgCommand $command): QueriedImage
     {
         $query = QueriedImage::create($command->image);
 

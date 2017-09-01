@@ -23,7 +23,7 @@ class SendRequestRankingHandler
      * @param \Search2d\Usecase\Pixiv\SendRequestRankingCommand $command
      * @return void
      */
-    public function __invoke(SendRequestRankingCommand $command): void
+    public function handle(SendRequestRankingCommand $command): void
     {
         $this->requestSender->send(
             new RequestRanking($command->mode, $command->date)
