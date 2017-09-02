@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Search2d\Domain\Search;
 
+use Cake\Chronos\ChronosInterface;
+
 class IndexedImage
 {
     /** @var \Search2d\Domain\Search\Sha1 */
@@ -20,25 +22,17 @@ class IndexedImage
     /** @var int */
     private $height;
 
-    /** @var \Search2d\Domain\Search\Detail */
-    private $detail;
+    /** @var string */
+    private $imageUrl;
 
-    /**
-     * @param \Search2d\Domain\Search\Image $image
-     * @param \Search2d\Domain\Search\Detail $detail
-     * @return \Search2d\Domain\Search\IndexedImage
-     */
-    public static function create(Image $image, Detail $detail): self
-    {
-        return new self(
-            $image->getSha1(),
-            $image->getMime(),
-            $image->getSize(),
-            $image->getWidth(),
-            $image->getHeight(),
-            $detail
-        );
-    }
+    /** @var string */
+    private $pageUrl;
+
+    /** @var string */
+    private $pageTitle;
+
+    /** @var \Cake\Chronos\ChronosInterface */
+    private $crawledAt;
 
     /**
      * @param \Search2d\Domain\Search\Sha1 $sha1
@@ -46,16 +40,34 @@ class IndexedImage
      * @param int $size
      * @param int $width
      * @param int $height
-     * @param \Search2d\Domain\Search\Detail $detail
+     * @param string $imageUrl
+     * @param string $pageUrl
+     * @param string $pageTitle
+     * @param \Cake\Chronos\ChronosInterface $crawledAt
      */
-    public function __construct(Sha1 $sha1, Mime $mime, int $size, int $width, int $height, Detail $detail)
+    public function __construct(
+        Sha1 $sha1,
+        Mime $mime,
+        int $size,
+        int $width,
+        int $height,
+        string $imageUrl,
+        string $pageUrl,
+        string $pageTitle,
+        ChronosInterface $crawledAt
+    )
     {
+        assert($crawledAt->getTimezone()->getName() === 'UTC');
+
         $this->sha1 = $sha1;
         $this->mime = $mime;
         $this->size = $size;
         $this->width = $width;
         $this->height = $height;
-        $this->detail = $detail;
+        $this->imageUrl = $imageUrl;
+        $this->pageUrl = $pageUrl;
+        $this->pageTitle = $pageTitle;
+        $this->crawledAt = $crawledAt;
     }
 
     /**
@@ -99,10 +111,34 @@ class IndexedImage
     }
 
     /**
-     * @return \Search2d\Domain\Search\Detail
+     * @return string
      */
-    public function getDetail(): Detail
+    public function getImageUrl(): string
     {
-        return $this->detail;
+        return $this->imageUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageUrl(): string
+    {
+        return $this->pageUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageTitle(): string
+    {
+        return $this->pageTitle;
+    }
+
+    /**
+     * @return \Cake\Chronos\ChronosInterface
+     */
+    public function getCrawledAt(): ChronosInterface
+    {
+        return $this->crawledAt;
     }
 }

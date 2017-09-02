@@ -61,13 +61,10 @@ class SearchAction
         foreach ($results as $result) {
             $data[] = [
                 'distance' => $result->getDistance(),
-                'work_url' => $result->getIndexedImage()->getDetail()->getWorkUrl(),
-                'work_title' => $result->getIndexedImage()->getDetail()->getWorkTitle(),
-                'work_caption' => $result->getIndexedImage()->getDetail()->getWorkCaption(),
-                'work_created' => $result->getIndexedImage()->getDetail()->getWorkCreated(),
-                'author_url' => $result->getIndexedImage()->getDetail()->getAuthorUrl(),
-                'author_name' => $result->getIndexedImage()->getDetail()->getAuthorName(),
-                'author_biog' => $result->getIndexedImage()->getDetail()->getAuthorBiog(),
+                'image_url' => $result->getIndexedImage()->getImageUrl(),
+                'page_url' => $result->getIndexedImage()->getPageUrl(),
+                'page_title' => $result->getIndexedImage()->getPageTitle(),
+                'crawled_at' => $result->getIndexedImage()->getCrawledAt(),
             ];
         }
 

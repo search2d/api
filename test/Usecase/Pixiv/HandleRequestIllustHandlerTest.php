@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Search2d\Test\Usecase\Pixiv;
 
 use Cake\Chronos\Chronos;
-use League\Tactician\CommandBus;
 use Prophecy\Argument;
 use Psr\Log\NullLogger;
 use Search2d\Domain\Pixiv\Illust;
@@ -36,13 +35,10 @@ class HandleRequestIllustHandlerTest extends TestCase
         $fakeImage = Image::create(file_get_contents($faker->image()));
         $fakeIllust = new Illust(
             $faker->randomNumber(),
-            $faker->text(32),
+            $faker->url,
             $faker->text(128),
-            Chronos::now(),
             new IllustPageCollection([$fakePage]),
-            $faker->randomNumber(),
-            $faker->name(),
-            $faker->text(128)
+            Chronos::now('UTC')
         );
 
         $success = null;

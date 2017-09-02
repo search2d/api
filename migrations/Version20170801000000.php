@@ -25,18 +25,15 @@ class Version20170801000000 extends AbstractMigration
     {
         $query = <<<EOQ
 CREATE TABLE `indexed_images` (
-  `sha1`         VARCHAR(40) NOT NULL,
-  `mime`         VARCHAR(64) NOT NULL,
-  `size`         INT UNSIGNED NOT NULL,
-  `width`        INT UNSIGNED NOT NULL,
-  `height`       INT UNSIGNED NOT NULL,
-  `work_url`     TEXT NOT NULL,
-  `work_title`   VARCHAR(255) NOT NULL,
-  `work_caption` TEXT NOT NULL,
-  `work_created` DATETIME NOT NULL,
-  `author_url`   TEXT NOT NULL,
-  `author_name`  VARCHAR(255) NOT NULL,
-  `author_biog`  TEXT NOT NULL,
+  `sha1`       VARCHAR(40) NOT NULL,
+  `mime`       VARCHAR(64) NOT NULL,
+  `size`       INT UNSIGNED NOT NULL,
+  `width`      INT UNSIGNED NOT NULL,
+  `height`     INT UNSIGNED NOT NULL,
+  `image_url`  TEXT NOT NULL,
+  `page_url`   TEXT NOT NULL,
+  `page_title` VARCHAR(255) NOT NULL,
+  `crawled_at` DATETIME NOT NULL,
   PRIMARY KEY (`sha1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 EOQ;
@@ -53,8 +50,8 @@ CREATE TABLE `queried_images` (
   `sha1`   VARCHAR(40) NOT NULL,
   `mime`   VARCHAR(32) NOT NULL,
   `size`   INT UNSIGNED NOT NULL,
-  `width`  INT UNSIGNED NOT NULL,
-  `height` INT UNSIGNED NOT NULL,
+  `width`      INT UNSIGNED NOT NULL,
+  `height`     INT UNSIGNED NOT NULL,
   PRIMARY KEY (`sha1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 EOQ;

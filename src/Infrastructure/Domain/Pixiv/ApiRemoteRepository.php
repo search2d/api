@@ -42,7 +42,6 @@ class ApiRemoteRepository implements RemoteRepository
     public function getIllust(int $illustId): Illust
     {
         $illust = $this->client->getIllustDetail($illustId)->illust;
-        $user = $this->client->getUserDetail($illust->user->id)->user;
 
         $pages = [];
         if ($illust->page_count === 1) {
@@ -55,13 +54,10 @@ class ApiRemoteRepository implements RemoteRepository
 
         return new Illust(
             $illust->id,
+            sprintf('https://www.pixiv.net/member_illust.php?mode=medium&illust_id=%d', $illust->id),
             $illust->title,
-            $illust->caption,
-            new Chronos($illust->create_date),
             new IllustPageCollection($pages),
-            $user->id,
-            $user->name,
-            $user->comment
+            Chronos::now('UTC')
         );
     }
 

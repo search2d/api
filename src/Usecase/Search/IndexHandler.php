@@ -41,7 +41,19 @@ class IndexHandler
      */
     public function handle(IndexCommand $command): void
     {
-        $this->indexedImageRepository->save(IndexedImage::create($command->image, $command->detail));
+        $indexedImage = new IndexedImage(
+            $command->image->getSha1(),
+            $command->image->getMime(),
+            $command->image->getSize(),
+            $command->image->getWidth(),
+            $command->image->getHeight(),
+            $command->imageUrl,
+            $command->pageUrl,
+            $command->pageTitle,
+            $command->crawledAt
+        );
+
+        $this->indexedImageRepository->save($indexedImage);
 
         $this->indexedImageStorage->upload($command->image);
 

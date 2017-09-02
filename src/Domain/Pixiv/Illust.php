@@ -11,55 +11,31 @@ class Illust
     private $id;
 
     /** @var string */
-    private $title;
+    private $url;
 
     /** @var string */
-    private $caption;
-
-    /** @var \Cake\Chronos\ChronosInterface */
-    private $created;
+    private $title;
 
     /** @var \Search2d\Domain\Pixiv\IllustPageCollection */
     private $pages;
 
-    /** @var int */
-    private $userId;
-
-    /** @var string */
-    private $userName;
-
-    /** @var string */
-    private $userBiog;
+    /** @var \Cake\Chronos\ChronosInterface */
+    private $crawledAt;
 
     /**
      * @param int $id
+     * @param string $url
      * @param string $title
-     * @param string $caption
-     * @param \Cake\Chronos\ChronosInterface $created
      * @param \Search2d\Domain\Pixiv\IllustPageCollection $pages
-     * @param int $userId
-     * @param string $userName
-     * @param string $userBiog
+     * @param \Cake\Chronos\ChronosInterface $crawledAt
      */
-    public function __construct(
-        int $id,
-        string $title,
-        string $caption,
-        ChronosInterface $created,
-        IllustPageCollection $pages,
-        int $userId,
-        string $userName,
-        string $userBiog
-    )
+    public function __construct(int $id, string $url, string $title, IllustPageCollection $pages, ChronosInterface $crawledAt)
     {
         $this->id = $id;
+        $this->url = $url;
         $this->title = $title;
         $this->pages = $pages;
-        $this->caption = $caption;
-        $this->created = $created;
-        $this->userId = $userId;
-        $this->userName = $userName;
-        $this->userBiog = $userBiog;
+        $this->crawledAt = $crawledAt;
     }
 
     /**
@@ -75,7 +51,7 @@ class Illust
      */
     public function getUrl(): string
     {
-        return sprintf('https://www.pixiv.net/member_illust.php?mode=medium&illust_id=%d', $this->id);
+        return $this->url;
     }
 
     /**
@@ -87,22 +63,6 @@ class Illust
     }
 
     /**
-     * @return string
-     */
-    public function getCaption(): string
-    {
-        return $this->caption;
-    }
-
-    /**
-     * @return \Cake\Chronos\ChronosInterface
-     */
-    public function getCreated(): ChronosInterface
-    {
-        return $this->created;
-    }
-
-    /**
      * @return \Search2d\Domain\Pixiv\IllustPageCollection
      */
     public function getPages(): IllustPageCollection
@@ -111,26 +71,10 @@ class Illust
     }
 
     /**
-     * @return string
+     * @return \Cake\Chronos\ChronosInterface
      */
-    public function getUserUrl(): string
+    public function getCrawledAt(): ChronosInterface
     {
-        return sprintf('https://www.pixiv.net/member.php?id=%d', $this->userId);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserName(): string
-    {
-        return $this->userName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserBiog(): string
-    {
-        return $this->userBiog;
+        return $this->crawledAt;
     }
 }

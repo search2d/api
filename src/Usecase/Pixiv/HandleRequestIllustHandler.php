@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface;
 use Search2d\Domain\Pixiv\RemoteRepository;
 use Search2d\Domain\Pixiv\RequestIllust;
 use Search2d\Domain\Pixiv\RequestIllustReceiver;
-use Search2d\Domain\Search\Detail;
 use Search2d\Usecase\Search\IndexCommand;
 use Search2d\Usecase\Search\IndexHandler;
 
@@ -76,21 +75,19 @@ class HandleRequestIllustHandler
     {
         $illust = $this->remoteRepository->getIllust($request->getIllustId());
 
-        $detail = new Detail(
-            $illust->getUrl(),
-            $illust->getTitle(),
-            $illust->getCaption(),
-            $illust->getCreated(),
-            $illust->getUserUrl(),
-            $illust->getUserName(),
-            $illust->getUserBiog()
-        );
-
         /** @var \Search2d\Domain\Pixiv\IllustPage $page */
         foreach ($illust->getPages() as $page) {
             $image = $this->remoteRepository->getImage($page->getImageUrl());
 
-            $this->indexHandler->handle(new IndexCommand($image, $detail));
+            $this->indexHandler->handle(
+                new IndexCommand(
+                    $image,
+                    $page->getImageUrl(),
+                    $illust->getUrl(),
+                    $illust->getTitle(),
+                    $illust->getCrawledAt()
+                )
+            );
         }
     }
 }

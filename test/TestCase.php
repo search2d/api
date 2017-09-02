@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Faker\Factory;
 use Faker\Generator;
-use function GuzzleHttp\Psr7\stream_for;
 use Psr\Http\Message\ResponseInterface;
 use Search2d\Container;
 use Search2d\Infrastructure\Presentation\Api\Frontend;
@@ -16,6 +15,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
+use function GuzzleHttp\Psr7\stream_for;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
