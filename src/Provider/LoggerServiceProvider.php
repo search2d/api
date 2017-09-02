@@ -28,19 +28,6 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
             $logger = new Logger($config->name);
 
-            if ($config->stream->enabled) {
-                $formatter = new LineFormatter();
-                $formatter->includeStacktraces();
-
-                $handler = new StreamHandler(
-                    $config->stream->path,
-                    Logger::toMonologLevel($config->stream->level)
-                );
-                $handler->setFormatter($formatter);
-
-                $logger->pushHandler($handler);
-            }
-
             if ($config->fluent->enabled) {
                 $formatter = new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);
                 $formatter->includeStacktraces();
@@ -54,6 +41,19 @@ class LoggerServiceProvider implements ServiceProviderInterface
                     $config->fluent->log_group_name,
                     $config->fluent->uid_path,
                     Logger::toMonologLevel($config->fluent->level)
+                );
+                $handler->setFormatter($formatter);
+
+                $logger->pushHandler($handler);
+            }
+
+            if ($config->stream->enabled) {
+                $formatter = new LineFormatter();
+                $formatter->includeStacktraces();
+
+                $handler = new StreamHandler(
+                    $config->stream->path,
+                    Logger::toMonologLevel($config->stream->level)
                 );
                 $handler->setFormatter($formatter);
 
