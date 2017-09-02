@@ -36,7 +36,7 @@ class UrlValidator
         }
 
         foreach ($ips as $ip) {
-            $this->validateIp($ip);
+            $this->validateNetwork($ip);
         }
     }
 
@@ -61,17 +61,37 @@ class UrlValidator
     }
 
     /**
-     * @param string $ip
+     * @param string $addr
      * @throws \Search2d\Domain\Search\UrlValidationException
      */
-    private function validateIp(string $ip): void
+    private function validateNetwork(string $addr): void
     {
-        $deniedAddrs = [
-            '127.0.0.1'
+        $deniedNetworks = [
+            '10.0.0.0/8',    // プライベートアドレス（クラスA）
+            '172.16.0.0/12',  // プライベートアドレス（クラスB）
+            '192.168.0.0/16', // プライベートアドレス（クラスC）
+            '127.0.0.0/8',   // ローカルループバックアドレス
+            '169.254.0.0/16', // リンクローカルアドレス
         ];
 
-        if (in_array($ip, $deniedAddrs)) {
-            throw new UrlValidationException();
+        foreach ($deniedNetworks as $deniedNetwork) {
+            if ($this->inNetwork($addr, $deniedNetwork)) {
+                throw new UrlValidationException();
+            }
         }
+    }
+
+    /**
+     * @param string $addr
+     * @param string $network
+     * @return bool
+     */
+    private function inNetwork($addr, $network): bool
+    {
+        list($networkAddr, $networkMask) = explode('/', $network);
+
+        $shift = 32 - $networkMask;
+
+        return (ip2long($addr) >> $shift << $shift) === (ip2long($networkAddr) >> $shift << $shift);
     }
 }
