@@ -5,11 +5,13 @@ namespace Search2d\Provider;
 
 use Fluent\Logger\FluentLogger;
 use Monolog\Formatter\JsonFormatter;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
+use Search2d\Infrastructure\Logger\ExceptionHandler;
 use Search2d\Infrastructure\Logger\FluentHandler;
 use Search2d\Infrastructure\Logger\MessagePackPacker;
 
@@ -27,10 +29,14 @@ class LoggerServiceProvider implements ServiceProviderInterface
             $logger = new Logger($config->name);
 
             if ($config->stream->enabled) {
+                $formatter = new LineFormatter();
+                $formatter->includeStacktraces();
+
                 $handler = new StreamHandler(
                     $config->stream->path,
                     Logger::toMonologLevel($config->stream->level)
                 );
+                $handler->setFormatter($formatter);
 
                 $logger->pushHandler($handler);
             }
@@ -55,6 +61,10 @@ class LoggerServiceProvider implements ServiceProviderInterface
             }
 
             return $logger;
+        };
+
+        $container[ExceptionHandler::class] = function (Container $container) {
+            return new ExceptionHandler($container[LoggerInterface::class]);
         };
     }
 }
