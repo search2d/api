@@ -10,10 +10,4 @@ interface IndexedImageStorage
      * @return void
      */
     function upload(Image $image): void;
-
-    /**
-     * @param \Search2d\Domain\Search\Sha1 $sha1
-     * @return string
-     */
-    function export(Sha1 $sha1): string;
 }

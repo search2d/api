@@ -30,9 +30,7 @@ return [
         's3' => [
             'region' => env_str('API_SEARCH_S3_REGION'),
             'indexed_image_bucket' => env_str('API_SEARCH_S3_INDEXED_IMAGE_BUCKET'),
-            'indexed_image_base_url' => env_str('API_SEARCH_S3_INDEXED_IMAGE_BASE_URL'),
             'queried_image_bucket' => env_str('API_SEARCH_S3_QUERIED_IMAGE_BUCKET'),
-            'queried_image_base_url' => env_str('API_SEARCH_S3_QUERIED_IMAGE_BASE_URL'),
         ],
         'nns' => [
             'base_uri' => env_str('API_SEARCH_NNS_BASE_URI'),

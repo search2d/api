@@ -51,8 +51,7 @@ class SearchServiceProvider implements ServiceProviderInterface
             $search = $container['config']->search;
             return new S3ImageStorage(
                 $container['search.s3_client'],
-                $search->s3->indexed_image_bucket,
-                $search->s3->indexed_image_base_url
+                $search->s3->indexed_image_bucket
             );
         };
 
@@ -60,8 +59,7 @@ class SearchServiceProvider implements ServiceProviderInterface
             $search = $container['config']->search;
             return new S3ImageStorage(
                 $container['search.s3_client'],
-                $search->s3->queried_image_bucket,
-                $search->s3->queried_image_base_url
+                $search->s3->queried_image_bucket
             );
         };
 
