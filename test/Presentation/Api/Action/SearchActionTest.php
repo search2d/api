@@ -6,6 +6,8 @@ namespace Search2d\Test\Presentation\Api\Action;
 use League\Tactician\CommandBus;
 use Prophecy\Argument;
 use Search2d\Container;
+use Search2d\Domain\Search\Mime;
+use Search2d\Domain\Search\QueriedImage;
 use Search2d\Domain\Search\ResultCollection;
 use Search2d\Domain\Search\Sha1;
 use Search2d\Presentation\Api\Action\Api\SearchAction;
@@ -29,12 +31,14 @@ class SearchActionTest extends TestCase
         $faker = $this->faker();
 
         $sha1 = new Sha1($faker->sha1);
+        $mime = new Mime($faker->mimeImage);
 
+        $query = new QueriedImage($sha1, $mime, 1, 1, 1);
         $results = new ResultCollection([]);
 
         $commandBus = $this->prophesize(CommandBus::class);
         $commandBus->handle(new SearchCommand($sha1, 5, 10))
-            ->willReturn($results)
+            ->willReturn([$query, $results])
             ->shouldBeCalled();
 
         $this->container[SearchAction::class] = function (Container $container) use ($commandBus) {
@@ -42,7 +46,20 @@ class SearchActionTest extends TestCase
         };
 
         $response = $this->call('GET', '/api/search/' . $sha1);
-        $this->assertSuccessResponse($response, 200, []);
+        $this->assertSuccessResponse(
+            $response,
+            200,
+            (object)[
+                'query' => (object)[
+                    'sha1' => $sha1->value,
+                    'mime' => $mime->value,
+                    'size' => 1,
+                    'width' => 1,
+                    'height' => 1,
+                ],
+                'images' => [],
+            ]
+        );
     }
 
     /**
