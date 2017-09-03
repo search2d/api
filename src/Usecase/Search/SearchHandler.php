@@ -46,17 +46,17 @@ class SearchHandler
 
     /**
      * @param \Search2d\Usecase\Search\SearchCommand $command
-     * @return \Search2d\Domain\Search\ResultCollection
+     * @return array
      * @throws \Search2d\Usecase\Search\QueriedImageNotFoundException
      */
-    public function handle(SearchCommand $command): ResultCollection
+    public function handle(SearchCommand $command): array
     {
         $query = $this->queriedImageRepository->find($command->sha1);
         if (!$query) {
             throw new QueriedImageNotFoundException();
         }
 
-        return $this->search($query->getSha1(), $command->radius, $command->count);
+        return [$query, $this->search($query->getSha1(), $command->radius, $command->count)];
     }
 
     /**

@@ -48,25 +48,43 @@ class SearchAction
         }
 
         try {
+            /** @var \Search2d\Domain\Search\QueriedImage $query */
             /** @var \Search2d\Domain\Search\ResultCollection $results */
-            $results = $this->commandBus->handle(
+            list($query, $results) = $this->commandBus->handle(
                 new SearchCommand(new Sha1($args['sha1']), self::SEARCH_RADIUS, self::SEARCH_COUNT)
             );
         } catch (QueriedImageNotFoundException $e) {
             return $this->helper->responseFailure($response, 404, '指定されたSHA1に対応する画像が存在しません');
         }
 
-        $data = [];
+        $images = [];
+
         /** @var \Search2d\Domain\Search\Result $result */
         foreach ($results as $result) {
-            $data[] = [
+            $images[] = [
                 'distance' => $result->getDistance(),
+                'sha1' => $result->getIndexedImage()->getSha1()->value,
+                'mime' => $result->getIndexedImage()->getMime()->value,
+                'size' => $result->getIndexedImage()->getSize(),
+                'width' => $result->getIndexedImage()->getWidth(),
+                'height' => $result->getIndexedImage()->getHeight(),
                 'image_url' => $result->getIndexedImage()->getImageUrl(),
                 'page_url' => $result->getIndexedImage()->getPageUrl(),
                 'page_title' => $result->getIndexedImage()->getPageTitle(),
-                'crawled_at' => $result->getIndexedImage()->getCrawledAt(),
+                'crawled_at' => $result->getIndexedImage()->getCrawledAt()->format(DATE_ATOM),
             ];
         }
+
+        $data = [
+            'query' => [
+                'sha1' => $query->getSha1()->value,
+                'mime' => $query->getMime()->value,
+                'size' => $query->getSize(),
+                'width' => $query->getWidth(),
+                'height' => $query->getHeight(),
+            ],
+            'images' => $images,
+        ];
 
         return $this->helper->responseSuccess($response, 200, $data);
     }
