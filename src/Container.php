@@ -12,6 +12,7 @@ class Container extends BaseContainer
     private $providers = [
         Provider\LoggerServiceProvider::class,
         Provider\DatabaseServiceProvider::class,
+        Provider\ExceptionServiceProvider::class,
         Provider\CommandBusServiceProvider::class,
 
         Provider\Domain\PixivServiceProvider::class,

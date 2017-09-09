@@ -11,7 +11,6 @@ use Monolog\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
-use Search2d\Infrastructure\Logger\ExceptionHandler;
 use Search2d\Infrastructure\Logger\FluentHandler;
 use Search2d\Infrastructure\Logger\MessagePackPacker;
 
@@ -61,10 +60,6 @@ class LoggerServiceProvider implements ServiceProviderInterface
             }
 
             return $logger;
-        };
-
-        $container[ExceptionHandler::class] = function (Container $container) {
-            return new ExceptionHandler($container[LoggerInterface::class]);
         };
     }
 }

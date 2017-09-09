@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Search2d\Infrastructure\Logger;
+namespace Search2d\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 
@@ -29,9 +29,11 @@ class ExceptionHandler
     /**
      * @param \Throwable $throwable
      * @return void
+     * @throws \Throwable
      */
     public function handle(\Throwable $throwable): void
     {
         $this->logger->error($throwable->getMessage(), ['exception' => $throwable]);
+        throw $throwable;
     }
 }

@@ -6,8 +6,8 @@ require __DIR__ . '/vendor/autoload.php';
 call_user_func(function () {
     $container = new \Search2d\Container(__DIR__);
 
-    /** @var \Search2d\Infrastructure\Logger\ExceptionHandler $exceptionHandler */
-    $exceptionHandler = $container[\Search2d\Infrastructure\Logger\ExceptionHandler::class];
+    /** @var \Search2d\Infrastructure\ExceptionHandler $exceptionHandler */
+    $exceptionHandler = $container[\Search2d\Infrastructure\ExceptionHandler::class];
     $exceptionHandler->install();
 
     /** @var \Symfony\Component\Console\Application $app */
